@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+<h1 style="color:blue;text-align:center">程序代码相似性检测系统</h1>
+<hr/>
+<h4 style="text-align:right">
+<a href='/'>返回首页</a>
+</h4>
+
+<!--
+<form style="text-align:center" action="/onLoad" method="post">
+文件夹路径：
+<input type="text" name="path" />
+<input type="submit" value="添加文件" />
+</form>
+
+<form style="text-align:center" action="/check" method="post">
+<input type="submit" value="开始检测" />
+</form>
+-->
+<h2 style="text-align:center">检测结果与判定</h2>
+<table align="center" class="table with-btn" id="table">
+<tr>
+<th width="10%">#</th>
+<th width="30%">待检测文件</th>
+<th width="30%">相似文件</th>
+<th width="8%">相似度</th>
+<th width="10%">检测结论</th>
+<th width="12%"></th>
+</tr>
+
+{% for i in range(0,len(ratelist))%}
+<tr>
+<td>{{i+1}}</td>
+<td>{{filelist[leftlist[i]]}}</td><td>{{filelist[rightlist[i]]}}</td><td>{{"%.6f"%ratelist[i]}}</td>
+{% if ratelist[i] > (0.9-0.00000000001) %}
+<td><span class="label label-danger">抄袭</span>
+<div class="btn-group"><button type="button" class="btn btn-dnager btn-sm dropdown-toggle" data-toggle="dropdown">
+                判定<span class="caret"></span></button>
+ <ul class="dropdown-menu" role="menu">
+<li><a href="#">正常</a></li>
+ </ul></div>
+
+</td>
+{% elif ratelist[i] > (0.8-0.0000000001) %}
+<td><span class="label label-warning">疑似</span></td>
+{% else %}
+<td><span class="label label-primary">正常</span>
+<div class="btn-group"><button type="button" class="btn btn-dnager btn-sm dropdown-toggle" data-toggle="dropdown">
+                判定<span class="caret"></span></button>
+ <ul class="dropdown-menu" role="menu">
+<li><a href="#">抄袭</a></li>
+ </ul></div>
+</td>
+{% end %}
+<td><a href="?qid={{qid}}&rid=detail_{{i}}_{{leftlist[i]}}_{{rightlist[i]}}" class="btn btn-success">详细结果</a></td>
+</tr>
+{% end %}
+</table>
+</div>
+</div>
+</div> 
+{% end %}

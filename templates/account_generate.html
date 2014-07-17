@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+	<div class="row">
+		<div class="page-title">批量用户生成</div>
+	</div>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label for="str-begin" class="col-sm-3 control-label">请输入标识符开始部分：</label>
+			<div class="col-md-3">
+				<input type="text" class="form-control" name="str-begin" id="str-begin" >
+			</div>
+			<label for="str-end" class="col-sm-2 control-label" style="display:none;">请输入标识符结束部分：</label>
+			<div class="col-md-3" style="display:none;">
+				<input type="text" class="form-control" name="str-end" id="str-end" style="display:none;">
+			</div>
+			<label for="start" class="col-sm-3 control-label">请输入生成账户序号起始值：</label>
+			<div class="col-md-3">
+				<input type="text" class="form-control" name="start" id="start" >
+			</div>
+		</div>
+
+		<div class="form-group">
+
+			<label for="size" class="col-sm-3 control-label" >请输入生成账户数量：</label>
+			<div class="col-md-3">
+				<input type="text" class="form-control" name="size" id="size" >
+			</div>
+			<div class="col-md-4 col-md-offset-1" style="padding-left:0px;"><button type="button" id="generate-btn" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-play"></span> 开始生成</button></div>
+		</div>
+
+		<div class="form-group">
+			<label for="account_type" class="col-sm-3 control-label" >请选择生成账户类型：</label>
+			<div class="col-md-2 radio">
+				<input type="radio" name="account_type" id="account_type" value="2" >应用业务管理员
+			</div>
+			<div class="col-md-2 radio">
+				<input type="radio" name="account_type" id="account_type" value="1" checked="true">普通用户
+			</div>
+		</div>
+
+		<div class="form-group">
+		</div>
+	</form>
+
+	
+		<div class="row"><div id="msg" class="col-md-12"></div></div>
+		<div class="row">
+		<div class="col-md-12">
+      <table id="account-list" class="table table-striped" style="display:none;">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>用户名</th>
+            <th>用户类型</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+</div>
+</div>
+</div>
+{% end %}
+{% block script %}
+<script>
+	$("#generate-btn").click(function(){
+		$("#account-list").css("display","table");
+		var strHead = $("#str-begin").val();
+		var strEnd = $("#str-end").val();
+		var start = parseInt($("#start").val());
+		var size = parseInt($("#size").val());
+		var account_type = parseInt($("#account_type:checked").val());
+		$.post("generate", {"strHead":strHead, "strEnd":strEnd, "start":start, "size":size, "account_type":account_type}).done(function(jsonStr){
+			response = jQuery.parseJSON(jsonStr);
+			result = response["result"];
+			var TYPE=["管理员用户","普通用户"];
+			var content = "";
+			$("#msg p").remove();
+			$("#msg").append("<p>已经成功为您生成以下共"+size+"个账户，账户密码初始值为12345678。</p>");
+			for (var i = 0; i < result.length; i++) {
+				content = content + "<tr><td>" + (i+1) + "</td><td>" + result[i]["USER_NAME"] + "</td><td>" + TYPE[result[i]["USER_TYPE"]] + "</td></tr>";
+			};
+			$("#account-list tbody tr").remove();
+			$("#account-list tbody").append(content);
+		});
+	});
+</script>
+{% end %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+<h1 style="color:blue;text-align:center">程序代码相似性检测系统</h1>
+<hr/>
+<h4 style="text-align:right">
+<a href='/'>返回首页</a>
+</h4>
+<table align="center" class="table">
+<tr>
+<td>待检测文件:<b>{{filelist[left]}}</b></td>
+<td>相似度:<b>{{"%.3f"%(rate*100)}}%</b></td>
+<td>相似文件:<b>{{filelist[right]}}</b></td>
+</tr>
+</table>
+<table align="center" width="80%" class="table">
+<tr>
+<td>
+<iframe src="mark_{{num}}_{{left}}_{{right}}_1{%if qid%}?qid={{qid}}{%end%}" width="570px" height="600px"></iframe>
+</td>
+<td>
+<iframe src="mark_{{num}}_{{left}}_{{right}}_2{%if qid%}?qid={{qid}}{%end%}" width="570px" height="600px"></iframe>
+</td>
+</tr>
+</table>
+<h4>统计特征:</h4>
+<table align="center" class="table">
+<tr>
+<td>
+<table align="center" width="50%" height="50%"class="table">
+<caption>待检测文件</caption>
+<tr>
+<th rowspan="7" width="20%">代码风格</th><td width="45%">行长字符平均值</td><td width="35%">{{sl[0]}}</td>
+</tr>
+<tr>
+<td>行前缩进平均值</td><td>{{sl[1]}}</td>
+</tr>
+<tr>
+<td>行中空白平均值</td><td>{{sl[2]}}</td>
+</tr>
+<tr>
+<td>行尾空白平均值</td><td>{{sl[3]}}</td>
+</tr>
+<tr>
+<td>空白代码行比例</td><td>{{sl[4]}}</td>
+</tr>
+<tr>
+<td>复合语句行比例</td><td>{{sl[5]}}</td>
+</tr>
+<tr>
+<td>左括号规范比例</td><td>{{sl[6]}}</td>
+</tr>
+<tr>
+<th rowspan="3">注释风格</th><td>注释行长平均值</td><td>{{sl[7]}}</td>
+</tr>
+<tr>
+<td>块注释所占比例</td><td>{{sl[8]}}</td>
+</tr>
+<tr>
+<td>单行注释占比例</td><td>{{sl[9]}}</td>
+</tr>
+<tr>
+<th rowspan="4">统计风格</th><td>代码行数</td><td>{{sl[10]}}</td>
+</tr>
+<tr>
+<td>赋值语句个数</td><td>{{sl[11]}}</td>
+</tr>
+<tr>
+<td>循环语句个数</td><td>{{sl[12]}}</td>
+</tr>
+<tr>
+<td>选择语句个数</td><td>{{sl[13]}}</td>
+</tr>
+</table>
+</td>
+<td>
+<table align="center" width="50%" height="50%" sytle="text-align:center" class="table">
+<caption>相似文件</caption>
+<tr>
+<th rowspan="7" width="20%">代码风格</th><td width="45%">行长字符平均值</td><td width="35%">{{sr[0]}}</td>
+</tr>
+<tr>
+<td>行前缩进平均值</td><td>{{sr[1]}}</td>
+</tr>
+<tr>
+<td>行中空白平均值</td><td>{{sr[2]}}</td>
+</tr>
+<tr>
+<td>行尾空白平均值</td><td>{{sr[3]}}</td>
+</tr>
+<tr>
+<td>空白代码行比例</td><td>{{sr[4]}}</td>
+</tr>
+<tr>
+<td>复合语句行比例</td><td>{{sr[5]}}</td>
+</tr>
+<tr>
+<td>左括号规范比例</td><td>{{sr[6]}}</td>
+</tr>
+<tr>
+<th rowspan="3">注释风格</th><td>注释行长平均值</td><td>{{sr[7]}}</td>
+</tr>
+<tr>
+<td>块注释所占比例</td><td>{{sr[8]}}</td>
+</tr>
+<tr>
+<td>单行注释占比例</td><td>{{sr[9]}}</td>
+</tr>
+<tr>
+<th rowspan="4">统计风格</th><td>代码行数</td><td>{{sr[10]}}</td>
+</tr>
+<tr>
+<td>赋值语句个数</td><td>{{sr[11]}}</td>
+</tr>
+<tr>
+<td>循环语句个数</td><td>{{sr[12]}}</td>
+</tr>
+<tr>
+<td>选择语句个数</td><td>{{sr[13]}}</td>
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+</div></div></div>
+{% end %}

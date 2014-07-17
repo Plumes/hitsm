@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>登陆-{{ handler.settings["site_name"] }}</title>
+  <link rel="stylesheet" href="{{ static_url("web/css/style.css")}}">
+    <link rel="stylesheet" href="{{ static_url("bootstrap3/css/bootstrap.min.css")}}">
+    <script src="{{ static_url("web/js/jquery.min.js")}}"></script>
+    <script src="{{ static_url("bootstrap3/js/bootstrap.min.js")}}"></script>
+</head>
+<body>
+  <div class="header">
+  <nav class="new navbar navbar-default navbar-static-top">
+  <div class="navbar-header">
+  <a class="navbar-brand" href="./" style="font-size:22px;">{{ handler.settings["site_name"] }}</a>
+    </div>
+     </nav>   
+    </div>
+  </div>
+  <div class="content-wrapper">
+  <div class="container login">
+  <div class="row">
+  <div class="col col-sm-6 col-sm-offset-2">
+<form class="form-horizontal">
+      <div class="form-group">
+        <label for="uname" class="col-sm-2 control-label">用户名</label>
+        <div class="col-sm-10">
+        <input type="text" id="uname"  name="uname" class="form-control" placeholder="请输入您的用户名" ></div>
+      </div>
+      <div class="form-group">
+        <label for="pwd" class="col-sm-2 control-label">密 &nbsp;&nbsp;&nbsp;码</label>
+        <div class="col-sm-10"><input type="password" id="pwd" name="pwd" class="form-control" placeholder="请输入您的密码" ></div>
+      </div>
+      <div class="form-group">
+        <label for="code" class="col-sm-2 control-label">验证码</label>
+        <div class="col-sm-6"><input type="text" id="code" name="code" class="form-control" placeholder="请输入右侧的验证码" ></div>
+        <div class="col-sm-2 col-sm-offset-1" id="showcode"></div>
+      </div>
+      <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-2">
+        <input type="button" id="login-btn" class="btn btn-primary" value="登陆"></div>
+      </div>
+    </form>
+  </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-2 err-msg"></div>
+  </div>
+  </div>
+  </div>
+</body>
+<script type="text/javascript">
+function getCode(){
+  $.post("/captcha/get").done(function(jsonString){
+    var response = jQuery.parseJSON(jsonString);
+    $("#showcode").text(response["msg"]);
+  });
+}
+$(document).ready(function(){
+  getCode();
+});
+$("#showcode").click(function(){
+  getCode();
+});
+  $("#login-btn").click(function() {
+    //检查验证码
+    var status=0;
+    $.post("/captcha/verify",{"code":$("#code").val()}).done(function(jsonString){
+      var response = jQuery.parseJSON(jsonString);
+      if(response["code"]!== 0){
+        $("#code").parent().prop("class","col-sm-6 has-error");
+        getCode();
+        status=1;
+      }
+      else{
+    // post登陆数据
+    var name = $("#uname").val();
+    var pwd = $("#pwd").val();
+    console.log(name);
+    $.post("login",{"uname":name, "pwd":pwd}).done(function(jsonString){
+      var response = jQuery.parseJSON(jsonString);
+      //console.log(response["code"]);
+      if( response["code"] === 0) {
+        self.location = "/";
+      } else {
+        $(".err-msg p").remove();
+        $(".err-msg").append("<p>"+response["msg"]+"</p>");
+      }
+    });}
+    });
+
+  });
+</script>
+</html>

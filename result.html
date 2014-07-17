@@ -1,0 +1,302 @@
+<html>
+<head>
+<style>
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 50%;    
+}
+
+.bordered {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 1px #ccc; 
+    -moz-box-shadow: 0 1px 1px #ccc; 
+    box-shadow: 0 1px 1px #ccc;         
+}
+
+.bordered tr:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;     
+}  
+.bordered tr{
+	background-color: #FFFFFF;
+}  
+.bordered td, .bordered th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;    
+}
+
+.bordered th {
+	cursor:pointer;
+    background-color: #dce9f9;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:    -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:     -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:      -o-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:         linear-gradient(top, #ebf3fc, #dce9f9);
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset; 
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;      
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5); 
+}
+
+.bordered td:first-child, .bordered th:first-child {
+    border-left: none;
+}
+
+.bordered th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+.bordered th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+.bordered th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.bordered tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+.bordered tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+</style>
+
+<script type="text/javascript">  
+//驱动器
+var fso, a, n, e, x;  
+fso = new ActiveXObject("Scripting.FileSystemObject");  
+e = new Enumerator(fso.Drives);  
+a = new Array;  
+for (; !e.atEnd(); e.moveNext()){  
+   x = e.item();  
+   a[a.length] = x.DriveLetter;  
+}  
+for(var i=0; i<a.length; i++) {  
+     document.write(a[i] + "<br>");  
+}  
+</script>
+</head>
+
+<title>程序代码相似性检测系统</title>
+
+<body background="/static/image/bg11.jpeg">
+<script type="text/javascript">
+function loadFile(){
+    var fso = new ActiveXObject("Scripting.FileSystemObject");  
+    var folder = fso.GetFolder(path); //需要获取的路径  
+ 	document.write("文件数:" + folder.Files.Count+ "<br><br>");   
+ 	var fileList = new Enumerator(folder.Files);   
+ 	for (; !fileList.atEnd(); fileList.moveNext()){   
+  	document.write(fileList.item().Name + "<br>");
+ 	}   
+ }
+</script> 
+
+<h1 style="color:blue;text-align:center">程序代码相似性检测系统</h1>
+<hr/>
+<h4 style="text-align:right">
+<a href='/'>返回首页</a>
+</h4>
+
+<!--
+<form style="text-align:center" action="/onLoad" method="post">
+文件夹路径：
+<input type="text" name="path" />
+<input type="submit" value="添加文件" />
+</form>
+
+<form style="text-align:center" action="/check" method="post">
+<input type="submit" value="开始检测" />
+</form>
+-->
+<h2 style="text-align:center">检测结果</h2>
+<table align="center" style="width:900px" class="bordered" id="table">
+<tr>
+<th width="10%">记录号:</th>
+<th width="36%">待检测文件:</th>
+<th width="36%">相似文件:</th>
+<th width="8%">相似度:</th>
+<th width="10%">检测结论:</th>
+</tr>
+
+{% for i in range(0,len(ratelist))%}
+<tr>
+<td>{{i+1}}</td>
+<td><a href="detail_{{i}}_{{leftlist[i]}}_{{rightlist[i]}}">{{filelist[leftlist[i]]}}</a></td><td><a href="detail_{{i}}_{{leftlist[i]}}_{{rightlist[i]}}">{{filelist[rightlist[i]]}}</a></td><td><a href="detail_{{i}}_{{leftlist[i]}}_{{rightlist[i]}}">{{"%.6f"%ratelist[i]}}</a></td>
+{% if ratelist[i] > (0.9-0.00000000001) %}
+<td><font color="#FF0000">抄袭</font></td>
+{% elif ratelist[i] > (0.8-0.0000000001) %}
+<td><font color="#FF9900">疑似</font></td>
+{% else %}
+<td><font color="#00FF00">安全</font></td>
+{% end %}
+</tr>
+{% end %}
+</table>
+<script type="text/javascript"> 
+
+var tableSort = function(){ 
+this.initialize.apply(this,arguments); 
+} 
+
+tableSort.prototype = { 
+
+initialize : function(tableId,clickRow,startRow,endRow,classUp,classDown,selectClass){ 
+this.Table = document.getElementById(tableId); 
+this.rows = this.Table.rows;//所有行 
+this.Tags = this.rows[clickRow-1].cells;//标签td 
+this.up = classUp; 
+this.down = classDown; 
+this.startRow = startRow; 
+this.selectClass = selectClass; 
+this.endRow = (endRow == 999? this.rows.length : endRow); 
+this.T2Arr = this._td2Array();//所有受影响的td的二维数组 
+this.setShow(); 
+}, 
+//设置标签切换 
+setShow:function(){ 
+var defaultClass = this.Tags[0].className; 
+for(var Tag ,i=0;Tag = this.Tags[i];i++){ 
+Tag.index = i; 
+addEventListener(Tag ,'click', Bind(Tag,statu)); 
+} 
+var _this =this; 
+var turn = 0; 
+function statu(){ 
+for(var i=0;i<_this.Tags.length;i++){ 
+_this.Tags[i].className = defaultClass; 
+} 
+if(turn==0){ 
+addClass(this,_this.down) 
+_this.startArray(0,this.index); 
+turn=1; 
+}else{ 
+addClass(this,_this.up) 
+_this.startArray(1,this.index); 
+turn=0; 
+} 
+} 
+}, 
+//设置选中列样式 
+colClassSet:function(num,cla){ 
+//得到关联到的td 
+for(var i= (this.startRow-1);i<(this.endRow);i++){ 
+for(var n=0;n<this.rows[i].cells.length;n++){ 
+removeClass(this.rows[i].cells[n],cla); 
+} 
+addClass(this.rows[i].cells[num],cla); 
+} 
+}, 
+//开始排序 num 根据第几列排序 aord 逆序还是顺序 
+startArray:function(aord,num){ 
+var afterSort = this.sortMethod(this.T2Arr,aord,num);//排序后的二维数组传到排序方法中去 
+this.array2Td(num,afterSort);//输出 
+}, 
+//将受影响的行和列转换成二维数组 
+_td2Array:function(){ 
+var arr=[]; 
+for(var i=(this.startRow-1),l=0;i<(this.endRow);i++,l++){ 
+arr[l]=[]; 
+for(var n=0;n<this.rows[i].cells.length;n++){ 
+arr[l].push(this.rows[i].cells[n].innerHTML); 
+} 
+} 
+return arr; 
+}, 
+//根据排序后的二维数组来输出相应的行和列的 innerHTML 
+array2Td:function(num,arr){ 
+this.colClassSet(num,this.selectClass); 
+for(var i= (this.startRow-1),l=0;i<(this.endRow);i++,l++){ 
+for(var n=0;n<this.Tags.length;n++){ 
+this.rows[i].cells[n].innerHTML = arr[l][n]; 
+} 
+} 
+}, 
+//传进来一个二维数组，根据二维数组的子项中的w项排序，再返回排序后的二维数组 
+sortMethod:function(arr,aord,w){ 
+//var effectCol = this.getColByNum(whichCol); 
+arr.sort(function(a,b){ 
+x = killHTML(a[w]); 
+y = killHTML(b[w]); 
+x = x.replace(/,/g,''); 
+y = y.replace(/,/g,''); 
+switch (isNaN(x)){ 
+case false: 
+return Number(x) - Number(y); 
+break; 
+case true: 
+return x.localeCompare(y); 
+break; 
+} 
+}); 
+arr = aord==0?arr:arr.reverse(); 
+return arr; 
+} 
+} 
+/*-----------------------------------*/ 
+function addEventListener(o,type,fn){ 
+if(o.attachEvent){o.attachEvent('on'+type,fn)} 
+else if(o.addEventListener){o.addEventListener(type,fn,false)} 
+else{o['on'+type] = fn;} 
+} 
+
+function hasClass(element, className) { 
+var reg = new RegExp('(\\s|^)'+className+'(\\s|$)'); 
+return element.className.match(reg); 
+} 
+
+function addClass(element, className) { 
+if (!this.hasClass(element, className)) 
+{ 
+element.className += " "+className; 
+} 
+} 
+
+function removeClass(element, className) { 
+if (hasClass(element, className)) { 
+var reg = new RegExp('(\\s|^)'+className+'(\\s|$)'); 
+element.className = element.className.replace(reg,' '); 
+} 
+} 
+
+var Bind = function(object, fun) { 
+return function() { 
+return fun.apply(object, arguments); 
+} 
+} 
+//去掉所有的html标记 
+function killHTML(str){ 
+return str.replace(/<[^>]+>/g,""); 
+} 
+//------------------------------------------------ 
+//tableid 第几行是标签行，从第几行开始排序，第几行结束排序(999表示最后) 升序标签样式，降序标签样式 选中列样式 
+//注意标签行的class应该是一致的 
+var ex1 = new tableSort('table',1,2,999,'up','down','hov'); 
+</script> 
+</body>
+</html>

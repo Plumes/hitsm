@@ -1,0 +1,350 @@
+<html>
+<head>
+<style>
+#Layer{
+	width:80%;
+	height:420px;
+	float:left;
+}
+#Left{
+	width:10%;
+	height:420px;
+	float:left;
+}
+#Right{
+	width:10%;
+	height:420px;
+	float:left;
+}
+#Layerl{
+	width:80%;
+	height:520px;
+	float:left;
+}
+#Leftl{
+	width:10%;
+	height:520px;
+	float:left;
+}
+#Rightl{
+	width:10%;
+	height:520px;
+	float:left;
+}
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 80%;    
+}
+
+.bordered {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 1px #ccc; 
+    -moz-box-shadow: 0 1px 1px #ccc; 
+    box-shadow: 0 1px 1px #ccc;         
+}
+
+.bordered tr:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;     
+}  
+.bordered tr{
+	background-color: #FFFFFF;
+}  
+.bordered td, .bordered th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;    
+}
+
+.bordered th {
+	cursor:pointer;
+    background-color: #dce9f9;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:    -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:     -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:      -o-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:         linear-gradient(top, #ebf3fc, #dce9f9);
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset; 
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;      
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5); 
+}
+
+.bordered td:first-child, .bordered th:first-child {
+    border-left: none;
+}
+
+.bordered th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+.bordered th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+.bordered th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.bordered tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+.bordered tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+</style>
+<script type="text/javascript" src="/static/jquery.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    $('#container1').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '检测记录分布图'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '比例',
+            data: [
+				['抄袭',{{rcdCopy}}],
+                ['疑似',{{rcdSusp}}],
+                ['安全',{{rcdSafe}}]
+            ]
+        }]
+    });
+});
+</script>
+<script type="text/javascript">
+$(function () {
+        $('#container2').highcharts({
+            title: {
+                text: '检测记录相似度分布图',
+                x: -20 //center
+            },
+            xAxis: {
+				title: {
+					text:'相似度'
+				},
+                categories: ['0-10%', '10-20%', '20-30%', '30-40%', '40-50%', '50-60%',
+                    '60-70%', '70-80%', '80-90%', '90-100%']
+            },
+            yAxis: {
+                title: {
+                    text: '记录数量'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: '检测记录',
+                data: [
+				{% for i in range(0,len(rcdPerc)-1) %}
+				{{rcdPerc[i]}},
+				{% end %}
+				{{rcdPerc[-1]}}
+				]
+            }]
+        });
+    });
+</script>
+<script type="text/javascript">
+$(function () {
+    $('#container3').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '待检测文件分布图'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '比例',
+            data: [
+				['抄袭',{{fileCopy}}],
+                ['疑似',{{fileSusp}}],
+                ['安全',{{fileSafe}}]
+            ]
+        }]
+    });
+});
+</script>
+<script type="text/javascript">
+$(function () {
+        $('#container4').highcharts({
+            title: {
+                text: '待检测文件相似度分布图',
+                x: -20 //center
+            },
+            xAxis: {
+				title: {
+					text:'待检测文件'
+				},
+                categories: [
+				{% for i in range(0,len(filenamelist)-1) %}
+				'{{filenamelist[i]}}',
+				{% end %}
+				'{{filenamelist[-1]}}'
+				]
+            },
+            yAxis: {
+                title: {
+                    text: '相似度'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [
+			{% for i in range(0,len(filenamelist)-1) %}
+				{
+				name:'{{filenamelist[i]}}',
+				data:[
+				{% for j in range(0,len(filedict[i])-1) %}
+					{{filedict[i][j]}},
+				{% end %}
+					{{filedict[i][-1]}}
+				]
+				},
+			{% end %}
+			{
+				name:'{{filenamelist[-1]}}',
+				data:[
+				{% for j in range(0,len(filedict[-1])-1) %}
+					{{filedict[-1][j]}},
+				{% end %}
+					{{filedict[-1][-1]}}
+				]
+			}]
+        });
+    });
+</script>
+
+</head>
+
+<title>HIT-SIM代码相似性检测系统</title>
+
+<body background="/static/image/bg11.jpeg">
+<script src="/static/js/highcharts.js"></script>
+<h1 style="color:blue;text-align:center">HIT-SIM</h1>
+<h2 style="color:blue;text-align:right">---哈尔滨工业大学代码相似性检测系统</h2>
+<hr/>
+<h4 style="text-align:right">
+<a href='result'>返回</a>    <a href='/'>返回首页</a>
+</h4>
+<h4 style="text-align:center">检测记录数据分析</h4>
+<div id="Left"></div>
+<div id="Layer">
+<div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</div>
+<div id="Right"></div>
+<div id="Left"></div>
+<div id="Layer">
+<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</div>
+<div id="Right"></div>
+<h4 style="text-align:center">待检测文件数据分析</h4>
+<div id="Left"></div>
+<div id="Layer">
+<div id="container3" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</div>
+<div id="Right"></div>
+<div id="Leftl"></div>
+<div id="Layerl">
+<div id="container4" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+</div>
+<div id="Rightl"></div>
+<table align="center" style="width:80%;word-wrap:break-word" class="bordered">
+<caption>聚类分析结果</caption>
+{% for sets in setdict %}
+	<tr>
+	<th width="20%">集合{{sets}}</th><td width="80%">
+	{% for i in range(0,len(setdict[sets])-1) %}
+		{{setdict[sets][i]}},&nbsp;&nbsp;&nbsp;&nbsp;
+	{% end %}
+	{{setdict[sets][-1]}}
+	</td>
+	</tr>
+{% end %}
+</table>
+</body>
+</html>

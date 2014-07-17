@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="inputName" class="col-sm-2 control-label">题目名称</label>
+            <div class="col-sm-4">
+              <input type="text" name="inputName" class="form-control" id="inputName" placeholder="题目名称">
+            </div>
+          </div>
+
+        <div class="form-group">
+          <label for="category1" class="col-sm-2 control-label">分&nbsp;&nbsp;&nbsp;&nbsp;类：</label>
+          <div class="col col-sm-2">
+          <select class="form-control" name="category1" id="category1" style="width:90%;">
+            <!-- <option value="all">全部</option> -->
+            {% for i in range(0,len(m_category1)) %}
+            <option value="{{ m_category1[i]["QUESTION_TYPE_ID"] }}" {% if i==0 %}checked="true"{%end%}>{{ m_category1[i]["QUESTION_TYPE_NAME"] }}</option>
+            {% end %}
+          </select>
+          </div>
+          <div class="col col-sm-2">
+          <select class="form-control" name="category2" id="category2" style="width:90%;" >
+            <!-- <option value="all">全部</option> -->
+            {% for i in range(0,len(m_category2)) %}
+            <option value="{{ m_category2[i]["QUESTION_TYPE_ID"] }}" style="display:none;" {% if i==0 %}checked="true"{%end%}>{{ m_category2[i]["QUESTION_TYPE_NAME"] }}</option>
+            {% end %}
+          </select>
+          </div>
+          <div class="col col-sm-2">
+          <select class="form-control" name="category3" id="category3" style="width:90%;" >
+            <!-- <option value="all">全部</option> -->
+            {% for i in range(0,len(m_category3)) %}
+            <option value="{{ m_category3[i]["QUESTION_TYPE_ID"] }}" style="display:none;" {% if i==0 %}checked="true"{%end%}>{{ m_category3[i]["QUESTION_TYPE_NAME"] }}</option>
+            {% end %}
+          </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="file" class="col-sm-2 control-label" style="padding-top:0px;">题目描述</label>
+            <div class="col-sm-4">
+                <input id="file" type="file" name="file" />
+            </div>
+        </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-primary">增加题目</button>
+            </div>
+          </div>
+        </form>
+    </div>
+</div>
+</div>
+{% end %}
+{% block script%}
+<script>
+$("#category1").change(function() {
+    $("#category2 option[value!='all']").css("display","none");
+    $("#category2").val("all");
+    $("#category3 option[value!='all']").css("display","none");
+    $("#category3").val("all");
+    var currentCategory1 = $("#category1").val().substring(0,4);
+    $("#category2 option[value^='"+ currentCategory1 + "']").css("display","block");
+
+  });
+$("#category2").change(function() {
+    $("#category3 option[value!='all']").css("display","none");
+    $("#category3").val("all");
+    var currentCategory2 = $("#category2").val().substring(0,8);
+    console.log(currentCategory2);
+    $("#category3 option[value^='"+ currentCategory2 + "']").css("display","block");
+
+  });
+</script>
+{%end%}

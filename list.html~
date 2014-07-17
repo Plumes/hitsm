@@ -1,0 +1,170 @@
+<script language=javascript>
+<!--
+    var obj = document.createElement("table");
+    var tbody = document.createElement("tbody");
+    var tr = document.createElement("tr");
+    var td = document.createElement("td");
+     td.innerText = "AAA"
+     tr.appendChild(td);
+     tbody.appendChild(tr);
+     obj.appendChild(tbody);
+     document.all.Form1.appendChild(obj);
+    var obj2 = new Array();
+    for (var i=0;i<5;i++)
+     {    
+         obj2[i] = obj.cloneNode(true);
+         obj2[i].setAttribute("border","1");
+         document.all.Form1.appendChild(obj2[i]);
+     }
+    
+    
+//-->
+</script>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" " 
+<HTML><HEAD><TITLE>无标题文档</TITLE> 
+<META http-equiv=Content-Type content="text/html; charset=gb2312"> 
+<SCRIPT language=javascript> 
+function addtable(){ 
+// 插入两行。 
+var oRow1=oTable.insertRow(oTable.rows.length); 
+var oRow2=oTable.insertRow(oTable.rows.length); 
+// 获取表格的行集合。 
+var aRows=oTable.rows; 
+// 获取第一行的单元格集合。 
+var aCells=oRow1.cells; 
+// 在第一行中插入两个单元格。 
+var oCell1_1=oRow1.insertCell(aCells.length); 
+var oCell1_2=oRow1.insertCell(aCells.length); 
+var oCell1_3=oRow1.insertCell(aCells.length); 
+
+// 获取第二行的单元格集合。 
+aCells=oRow2.cells; 
+// 在第二行中插入两个单元格。 
+var oCell2_1=aRows(oRow2.rowIndex).insertCell(aCells.length); 
+var oCell2_2=aRows(oRow2.rowIndex).insertCell(aCells.length); 
+var oCell2_3=aRows(oRow2.rowIndex).insertCell(aCells.length); 
+// 为 4 个新单元格添加规范的 HTML 值。 
+oCell1_1.innerHTML="<B>Cell 1.1!</B>"; 
+oCell1_2.innerHTML="<B>Cell 1.2!</B>"; 
+oCell1_3.innerHTML="<B><input type='button' value='delete' onclick='deleteTR(this);'></B>"; 
+oCell2_1.innerHTML="<B>Cell 2.1!</B>"; 
+oCell2_2.innerHTML="<B>Cell 2.2!</B>"; 
+oCell2_3.innerHTML="<B><input type='button' value='delete' onclick=(deleteTR(this));>'</B>"; 
+
+} 
+
+function deleteTR(obj){ 
+//alert(obj.parentElement.parentElement.tagName); 
+var rowIndex = obj.parentElement.parentElement.parentElement.rowIndex; 
+//alert(rowIndex); 
+if (rowIndex > -1){ 
+oTable.deleteRow(rowIndex); 
+} 
+} 
+
+function addtr(){ 
+var tr = document.createElement("TR"); 
+var td = document.createElement("TD"); 
+var tbody = document.createElement("tbody"); 
+td.height = 20; 
+td.innerText = "hahah"; 
+tr.appendChild(td); 
+td = document.createElement("TD"); 
+td.innerText = "dududu"; 
+tr.appendChild(td); 
+td = document.createElement("TD"); 
+td.innerText = "dududu"; 
+tr.appendChild(td); 
+tbody.appendChild(tr); 
+oTable1.appendChild(tbody); 
+//oTable1.refresh(); 
+oTable1.normalize(); 
+document.all.tabletext.value=oTable1.outerHTML; 
+} 
+
+
+
+
+</SCRIPT> 
+
+<META content="MSHTML 6.00.2600.0" name=GENERATOR></HEAD> 
+<BODY> 
+<P>&nbsp;</P> 
+<FORM id=form1 name=form1 action="" method=post> 
+<TABLE id=oTable cellSpacing=0 cellPadding=0 width="100%" border=1> 
+<TBODY> 
+<TR> 
+<TD height=15>First Name </TD> 
+<TD>Lastname</TD> 
+<TD>&nbsp;</TD></TR></TBODY></TABLE><INPUT onclick=addtable(); type=button value=Add name=Add> 
+
+<TABLE id=oTable1 cellSpacing=0 cellPadding=0 width="100%" border=1> 
+<TBODY> 
+<TR> 
+<TD height=15>First Name </TD> 
+<TD>Lastname</TD> 
+<TD>&nbsp;</TD></TR></TBODY></TABLE><INPUT onclick=addtr(); type=button value=Add name=Add> 
+<INPUT id=tabletext> </FORM> 
+<P>&nbsp;</P> 
+<SCRIPT language=javascript> 
+<!-- 
+var obj = document.createElement("table"); 
+var tbody = document.createElement("tbody"); 
+var tr = document.createElement("tr"); 
+var td = document.createElement("td"); 
+td.innerText = "AAA" 
+tr.appendChild(td); 
+tbody.appendChild(tr); 
+obj.appendChild(tbody); 
+document.all.form1.appendChild(obj); 
+var obj2 = new Array(); 
+for (var i=0;i<5;i++) 
+{ 
+obj2[i] = obj.cloneNode(true); 
+obj2[i].setAttribute("border","1"); 
+document.all.form1.appendChild(obj2[i]); 
+} 
+
+
+//--> 
+</SCRIPT> 
+</BODY></HTML>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function ff()
+     {   var parNode = document.getElementById("table1"); 
+    
+     //定位到table上
+         tbody = document.createElement("TBODY");
+         var tr= document.createElement("tr"); //新建一个tr类型的Element节点
+         var td = document.createElement("td"); //新建一个td类型的Element节点
+         td.appendChild(document.createTextNode("<tr><td>1</td>"));
+         tr.appendChild(td);
+    
+         var td = document.createElement("td"); //新建一个td类型的Element节点
+         td.appendChild(document.createTextNode("<td>2</td></tr>"));
+         tr.appendChild(td);
+         tbody.appendChild(tr);
+
+
+
+         var th = document.createElement("th"); //新建一个td类型的Element节点
+         th.colSpan=2;
+         th.appendChild(document.createTextNode("<tr><th colspan='2'>3</th></tr>"));
+         var tr= document.createElement("tr"); //新建一个td类型的Element节点
+         tr.appendChild(th);
+         tbody.appendChild(tr);
+        alert(parNode);
+         parNode.appendChild(tbody);
+
+
+
+}
+
+<INPUT style="Z-INDEX: 101; LEFT: 392px; POSITION: absolute; TOP: 128px" type="button"
+                 value="Button" onclick="ff()">
+            <TABLE id="Table1" style="Z-INDEX: 102; LEFT: 320px; WIDTH: 300px; POSITION: absolute; TOP: 496px; HEIGHT: 3px"
+                 cellSpacing="1" cellPadding="1" width="300" border="1">
+            </TABLE>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

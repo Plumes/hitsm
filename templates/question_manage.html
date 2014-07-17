@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+	<div class="col-md-12 page-title">
+		题目维护
+	</div>
+</div>
+	<div class="row" style="display:none;">
+		您一共上传了{{ len(questions) }}道问题
+	</div>
+	<div class="row">
+		<a href="./new" class="btn btn-primary">增加问题</a>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>题目名称</th>
+						<th>题目类别</th>
+						<th>题目提交日期</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in range(0, len(questions)) %}
+					<tr>
+						<td>{{ i+1 }}</td>
+						<td>{{ questions[i]["QUESTION_TITLE"] }}</td>
+						<td>{{ questions[i]["QUESTION_TYPE_NAME"] }}</td>
+						<td>{{ questions[i]["QUESTION_SUBMIT_DATE"].strftime("%Y年%m月%d日") }}</td>
+						<td><div class="btn-toolbar">
+							<input type="hidden" class="qid" value="{{ questions[i]["QUESTION_ID"] }}">
+							<a href="update?qid={{questions[i]["QUESTION_ID"]}}" class="btn btn-warning">修改</a>
+							<button type="button" class="btn btn-danger del-btn">删除</button>
+						</div></td>
+					</tr>
+					{% end %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+{% end %}
+
+{% block script %}
+<script>
+	$(".del-btn").click(function(){
+		var obj=this;
+		var qid = $(obj).parent().children(".qid").val();
+		console.log(qid);
+		$.post("delete", {"qid":qid} ).done(function(){
+			self.location="manage";
+		});
+	});
+</script>
+{% end %}

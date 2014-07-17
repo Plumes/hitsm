@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="content-wrapper">
+欢迎使用代码相似性检测系统
+</div>
+{% end %}

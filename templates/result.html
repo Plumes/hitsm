@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+<h1 style="color:blue;text-align:center">程序代码相似性检测系统</h1>
+<hr/>
+<h4 style="text-align:right">
+<a href='/'>返回首页</a>
+</h4>
+
+<!--
+<form style="text-align:center" action="/onLoad" method="post">
+文件夹路径：
+<input type="text" name="path" />
+<input type="submit" value="添加文件" />
+</form>
+
+<form style="text-align:center" action="/check" method="post">
+<input type="submit" value="开始检测" />
+</form>
+-->
+<h2 style="text-align:center">检测结果</h2>
+<table align="center" class="table with-btn" id="table" >
+<tr>
+<th width="10%">#</th>
+<th width="36%">待检测文件</th>
+<th width="36%">相似文件</th>
+<th width="8%">相似度</th>
+<th width="10%">检测结论</th>
+</tr>
+
+{% for i in range(0,len(ratelist))%}
+<tr>
+<td>{{i+1}}</td>
+<td><a href="detail_{{i}}_{{leftlist[i]}}_{{rightlist[i]}}">{{filelist[leftlist[i]]}}</a></td><td><a href="detail_{{i}}_{{leftlist[i]}}_{{rightlist[i]}}">{{filelist[rightlist[i]]}}</a></td><td><a href="detail_{{i}}_{{leftlist[i]}}_{{rightlist[i]}}">{{"%.6f"%ratelist[i]}}</a></td>
+{% if ratelist[i] > (0.9-0.00000000001) %}
+<td><span class="label label-danger">抄袭</span></td>
+{% elif ratelist[i] > (0.8-0.0000000001) %}
+<td><span class="label label-warning">疑似</span></td>
+{% else %}
+<td><span class="label label-primary">正常</span></td>
+{% end %}
+</tr>
+{% end %}
+</table>
+</div>
+</div>
+</div> 
+{% end %}

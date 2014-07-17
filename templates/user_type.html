@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+	<div class="col-md-12 page-title">
+		用户权限管理
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+	<div class="btn-toolbar" role="toolbar">
+		<button type="button" class="btn btn-warning" disabled="true" value="2">设为应用业务管理员</button>
+		<button type="button" class="btn btn-success" disabled="true" value="1">设为普通用户</button>
+		<button type="button" class="btn btn-danger" disabled="true" value="0">禁止登陆</button>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th><input type="checkbox" id="checkall"></th>
+				<th>No.</th>
+				<th>Name</th>
+				<th>Type</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for i in range(0, len(users)) %}
+			{% set TYPE_NAME = ["已被禁止登陆", "普通用户", "应用业务管理员", "管理员"] %}
+			<tr>
+				<td><input type="checkbox" value="{{ users[i]["USER_ID"]}}" name="user-id" class="user-id"></td>
+				<td>{{ i+1 }}</td>
+				<td>{{ users[i]["USER_NAME"] }}</td>
+				<td>{{ TYPE_NAME[int(users[i]["USER_TYPE"])] }}</td>
+			</tr>
+			{% end %}
+		</tbody>
+	</table>
+	</div>
+</div>
+</div>
+</div>
+{% end %}
+{% block script %}
+<script type="text/javascript">
+$("#checkall").click(function(){
+	var status = $("#checkall").prop("checked");
+	var obj_list = $("input.user-id[type='checkbox']");
+	for(i=0;i<obj_list.length;i++) {
+		$(obj_list[i]).prop("checked",status);
+	}
+});
+$("input[type='checkbox']").click (function(){
+	var obj_list = $("input.user-id[type='checkbox']:checked");
+	if(obj_list.length>0) {
+		$($(".btn-toolbar .btn")[0]).prop("disabled",false);
+		$($(".btn-toolbar .btn")[1]).prop("disabled",false);
+		$($(".btn-toolbar .btn")[2]).prop("disabled",false);
+	}
+	else {
+		$($(".btn-toolbar .btn")[0]).prop("disabled",true);
+		$($(".btn-toolbar .btn")[1]).prop("disabled",true);
+		$($(".btn-toolbar .btn")[2]).prop("disabled",true);
+	}
+});
+$(".btn-toolbar .btn").click(function(){
+	var type = $(this).attr("value");
+	var uidList = [];
+	var obj_list = $("input.user-id[type='checkbox']:checked");
+	for (var i = 0; i < obj_list.length; i++) {
+		uidList.push($(obj_list[i]).val())
+	};
+	$.post("usertype", {"uidList[]":uidList, "type":type}).done(function(){
+		self.location = "usertype";
+	});
+});
+</script>
+
+{% end %}

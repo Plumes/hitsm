@@ -1,0 +1,81 @@
+<html>
+<head>
+<script type="text/javascript">  
+//驱动器
+var fso, a, n, e, x;  
+fso = new ActiveXObject("Scripting.FileSystemObject");  
+e = new Enumerator(fso.Drives);  
+a = new Array;  
+for (; !e.atEnd(); e.moveNext()){  
+   x = e.item();  
+   a[a.length] = x.DriveLetter;  
+}  
+for(var i=0; i<a.length; i++) {  
+     document.write(a[i] + "<br>");  
+}  
+</script>
+</head>
+
+<title>HIT-SIM代码相似性检测系统</title>
+
+<body>
+<script type="text/javascript">
+function loadFile(){
+    var fso = new ActiveXObject("Scripting.FileSystemObject");  
+    var folder = fso.GetFolder(path); //需要获取的路径  
+ 	document.write("文件数:" + folder.Files.Count+ "<br><br>");   
+ 	var fileList = new Enumerator(folder.Files);   
+ 	for (; !fileList.atEnd(); fileList.moveNext()){   
+  	document.write(fileList.item().Name + "<br>");
+ 	}   
+ }
+</script> 
+
+<h1 style="color:blue;text-align:center">HIT-SIM</h1>
+<h2 style="color:blue;text-align:right">---哈尔滨工业大学代码相似性检测系统</h2>
+<hr/>
+
+<form style="text-align:center" action="/onLoad" method="post">
+文件夹路径：
+<input type="text" name="path" />
+<input type="submit" value="添加文件" />
+</form>
+
+<form style="text-align:center" action="/check" method="post">
+<input type="submit" value="开始检测" />
+</form>
+<table align="center">
+<tr>
+<th>FILE LIST</th>
+</tr>
+</table>
+<table align="center" border=1 style="width:800px;text-align:center">
+{% for file in filelist %}
+<tr>
+<td>{{file}}</td>
+</tr>
+{% end %}
+</table>
+<p>Total:{{size}}</p>
+{% if err==-1 %}
+<script type="text/javascript">
+	alert('您输入的路径不存在');
+</script>
+{% end %}
+{% if err==-2 %}
+<script type="text/javascript">
+	alert('您输入的是一个文件');
+</script>
+{% end %}
+{% if err==-3 %}
+<script type="text/javascript">
+	alert('您选择的路径中合法文件数量小于2个，无法检测');
+</script>
+{% end %}
+{% if err==-4 %}
+<script type="text/javascript">
+	alert('请先添加文件再检测');
+</script>
+{% end %}
+</body>
+</html>

@@ -1,0 +1,212 @@
+<html>
+<head>
+<link href="/static/bootstrap.css" rel="stylesheet" type="text/css">
+<style>
+#Layer{
+	width:60%;
+	height:20px;
+	float:left;
+}
+#Left{
+	width:20%;
+	height:20px;
+	float:left;
+}
+#Right{
+	width:20%;
+	height:20px;
+	float:left;
+}
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 50%;    
+}
+
+.bordered {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 1px #ccc; 
+    -moz-box-shadow: 0 1px 1px #ccc; 
+    box-shadow: 0 1px 1px #ccc;         
+}
+
+.bordered tr:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;     
+}  
+   
+.bordered td, .bordered th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;    
+}
+.bordered tr{
+	background-color: #FFFFFF;
+}
+.bordered th {
+    background-color: #dce9f9;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:    -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:     -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:      -o-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:         linear-gradient(top, #ebf3fc, #dce9f9);
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset; 
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;      
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5); 
+}
+
+.bordered td:first-child, .bordered th:first-child {
+    border-left: none;
+}
+
+.bordered th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+.bordered th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+.bordered th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.bordered tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+.bordered tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+</style>
+
+<!--
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+-->
+<script type="text/javascript" src="/static/jquery.min.js"></script>
+<script type="text/javascript">
+//驱动器
+var fso, a, n, e, x;  
+fso = new ActiveXObject("Scripting.FileSystemObject");  
+e = new Enumerator(fso.Drives);  
+a = new Array;  
+for (; !e.atEnd(); e.moveNext()){  
+   x = e.item();  
+   a[a.length] = x.DriveLetter;  
+}  
+for(var i=0; i<a.length; i++) {  
+     document.write(a[i] + "<br>");  
+}  
+</script>
+</head>
+
+<title>程序代码相似性检测系统</title>
+
+<body  background="/static/image/bg11.jpeg" >
+<script type="text/javascript">
+function loadFile(){
+    var fso = new ActiveXObject("Scripting.FileSystemObject");  
+    var folder = fso.GetFolder(path); //需要获取的路径  
+ 	document.write("文件数:" + folder.Files.Count+ "<br><br>");   
+ 	var fileList = new Enumerator(folder.Files);   
+ 	for (; !fileList.atEnd(); fileList.moveNext()){   
+  	document.write(fileList.item().Name + "<br>");
+ 	}   
+ }
+</script> 
+
+<h1 style="color:blue;text-align:center">程序代码相似性检测系统</h1>
+<hr/>
+<h4 style="text-align:right">
+<a href='/'>返回首页</a>
+</h4>
+<h2 id="ppp" style="text-align:center">代码检测中...</h2>
+<h4 id="qqq" style="text-align:center"></h4>
+<p id="perct" style="text-align:center"></p>
+<p style="text-align:center"></p>
+<p></p>
+<p></p>
+<div id="Left"></div>
+<div id="Layer" class="progress progress-striped active">
+<div id="probar" class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+<span id="prospan" class="sr-only" style="width:60%"></span>
+</div>
+</div>
+<div id="Right"><p></p></div>
+
+<table align="center" style="width:900px" class="bordered">
+<caption><b>完成任务列表:</b></caption>
+<tr>
+<th width="44%">待检测文件:</th>
+<th width="44%">相似文件:</th>
+<th width="12%">检测耗时:</th>
+</tr>
+<!--{% for i in range (0,len(filelist)) %}
+{% for j in range (i+1,len(filelist)) %}
+<tr>
+<td>{{filelist[i]}}</td>
+<td></td><td></td>
+<td>{{filelist[j]}}</td>
+</tr>
+{% end %}
+{% end %}
+-->
+</table>
+
+   	<script>
+		var max = 0, min = 9999999999999999,sum = 0,avg = 0;
+		var now = 0, tot = {{size*(size-1)/2}};
+        (function($) {          
+            var polling = function() {
+                $.get('/polling', function(data){
+					var dataObj = JSON.parse(data);
+					var timenow = dataObj.timelists[dataObj.i*dataObj.length+dataObj.j];
+					//document.write(dataObj.i);
+					$("table").append("<tr><td>"+dataObj.cppfilelist[dataObj.i]+"</td><td>"+dataObj.cppfilelist[dataObj.j]+"</td><td>"+timenow.toFixed(3)+" s</td></tr>");
+					now = now + 1 ;
+					document.getElementById("perct").innerHTML="总任务数:"+tot+",&nbsp;&nbsp;已完成:"+now+".";
+					document.getElementById("probar").style.width= (now/tot)*100+"%";
+					//$("p").write("已完成:"+dataObj.tsk)
+					if(timenow>max)
+						max=timenow;
+					if(timenow<min)
+						min=timenow;
+					sum = sum + timenow;
+
+					if(dataObj.i==dataObj.length-2 && dataObj.j==dataObj.length-1)
+					{
+						document.getElementById("ppp").innerHTML="检测完成,<a href='result'>查看结果</a>";
+						avg = sum / (dataObj.length*(dataObj.length-1)/2)
+						document.getElementById("qqq").innerHTML="总耗时:"+sum.toFixed(3)+" s ; 最长耗时:"+max.toFixed(3)+" s ; 最短耗时:"+min.toFixed(3)+" s ; 平均耗时:"+avg.toFixed(3)+" s ."
+						return;
+					}
+					//$("table").append("<tr><td>"+dataObj.j+"</td></tr>");
+                    polling();
+                });
+            };
+            polling();
+        })(jQuery);
+    </script>
+</body>
+</html>

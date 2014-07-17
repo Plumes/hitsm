@@ -1,0 +1,19 @@
+<html>
+<body bgcolor="#FFFFFF">
+<p>
+{% for i in range(0,len(sstr)) %}
+{% if smark[i]==-1 %}
+<font size="6">{{sstr[i]}}</font>
+{% else %}
+<u><font color="{{clist[smark[i]]}}" size="6">{{sstr[i]}}</font></u>
+{% end %}
+{% if sstr[i]=='\n' %}
+</p><p>
+{% end %}
+{% if sstr[i]==' ' %}
+&nbsp;
+{% end %}
+{% end %}
+</p>
+</body>
+</html>

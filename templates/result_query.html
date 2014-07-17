@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="content-wrapper">
+<div class="container new">
+  <div class="row">
+    <div class="col-md-12 page-title">
+      
+    </div>
+  </div>
+  <div class="row">
+      <div class="row">
+    <div class="col-md-6 col-md-offset-2" style="margin-bottom:9px;">
+      <label for="title" style="margin-left:10px;">题目名称：</label>
+      <input type="text" style="width:310px;" />
+    </div>
+    </div>
+
+    <div class="col-md-6 col-md-offset-2">
+      <label for="category1">分&nbsp;&nbsp;&nbsp;&nbsp;类：</label>
+      <select name="category1" id="category1" value="all" >
+        <option value="all">全部</option>
+        {% for category in m_category1 %}
+        <option value="{{ category["QUESTION_TYPE_ID"] }}">{{ category["QUESTION_TYPE_NAME"] }}</option>
+        {% end %}
+      </select>
+
+      <select name="category2" id="category2" value="all" >
+        <option value="all">全部</option>
+        {% for category in m_category2 %}
+        <option value="{{ category["QUESTION_TYPE_ID"] }}" style="display:none;">{{ category["QUESTION_TYPE_NAME"] }}</option>
+        {% end %}
+      </select>
+
+      <select name="category3" id="category3" value="all" >
+        <option value="all">全部</option>
+        {% for category in m_category3 %}
+        <option value="{{ category["QUESTION_TYPE_ID"] }}" style="display:none;" >{{ category["QUESTION_TYPE_NAME"] }}</option>
+        {% end %}
+      </select>
+    </div>
+    <div class="col-md-2 col-md-offset-1"><button type="button" class="btn btn-primary btn-lg" id="query-btn" class="pure-button pure-input-3-3 pure-button-primary"><span class="glyphicon glyphicon-search"></span> 查询</button></div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-6 col-md-offset-2">
+      <label for="author">出题人：</label>
+      <select name="author" id="author" value="all">
+        <option value="all">全部</option>
+        {% for author in authors %}
+        <option value="{{ author["USER_ID"] }}">{{ author["USER_NAME"] }}</option>
+        {% end %}
+      </select>
+    </div>
+    </div>
+    
+    <div class="row">
+    <div class="col-md-6 col-md-offset-2">
+    <form class="form-inline" role="form" style="margin-top:19px;">
+      <label for="time">题目提交日期：</label>
+      <div class="form-group" id="time" style="width:35%;">
+        <div class="input-group">
+          <div class="input-group-addon">起始时间</div>
+          <input class="form-control" id="stime" type="text" placeholder="20140101">
+        </div>
+      </div>
+      <div class="form-group" style="width:35%;" >
+        <div class="input-group">
+          <div class="input-group-addon">截止时间</div>
+          <input class="form-control" id="etime" type="text" placeholder="20140101">
+        </div>
+      </div>
+      </form>
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <table id="question-list" class="table table-striped" style="display:none;">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>题目名称</th>
+            <th>出题人</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="btn-toobar paginator" style="display:none;">
+        <div class="btn-group">
+          <input type="button" class="btn btn-default prev" value="《" />
+          <a class="btn btn-default current" disabled value="1" /></a>
+          <input type="button" class="btn btn-default next" value="》" />
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% end %}
+{% block script %}
+<script>
+  $("#category1").change(function() {
+    $("#category2 option[value!='all']").css("display","none");
+    $("#category2").val("all");
+    $("#category3 option[value!='all']").css("display","none");
+    $("#category3").val("all");
+    var currentCategory1 = $("#category1").val().substring(0,4);
+    $("#category2 option[value^='"+ currentCategory1 + "']").css("display","block");
+
+  });
+  $("#category2").change(function() {
+    $("#category3 option[value!='all']").css("display","none");
+    $("#category3").val("all");
+    var currentCategory2 = $("#category2").val().substring(0,8);
+    console.log(currentCategory2);
+    $("#category3 option[value^='"+ currentCategory2 + "']").css("display","block");
+
+  });
+  $("#query-btn").click(function(){
+    var category1 = $("#category1").val();
+    var category2 = $("#category2").val();
+    var category3 = $("#category3").val();
+    var author = $("#author").val();
+    var stime = $("#stime").val();
+    var etime = $("#etime").val();
+    $.post("query",{"author":author, "stime":stime, "etime":etime, "category1":category1, "category2":category2, "category3":category3, "start":0, "length":10}).done(function(jsonStr){
+      var response = jQuery.parseJSON(jsonStr);
+      var result = response["result"];
+      var content = ""
+      for (var i = 0; i < result.length; i++) {
+        content = content + "<tr><td>" + (i+1) + "</td><td>" + result[i]["QUESTION_TITLE"] + "</td><td>" + result[i]["USER_NAME"] + "</td><td><a href='/run?qid="+result[i]["QUESTION_ID"]+"' class='btn btn-default'>代码检测</a></td></tr>";
+      };
+      $("#question-list").css("display","table");
+      $("#question-list tbody tr").remove();
+      $("#question-list tbody").append(content);
+
+      $(".paginator").css("display","table");
+      var page_num = parseInt((response["length"]-1)/10)+1;
+      $(".paginator .current").text("1/"+page_num);
+      $(".paginator .current").attr("value","1")
+      $(".paginator .prev").prop("disabled",true);
+      console.log(response["length"]/10);
+
+      if(response["length"]/10 <= 1) {
+        $(".paginator .next").prop("disabled",true);
+      } else {
+        $(".paginator .next").prop("disabled",false);
+      }
+
+    });
+  });
+
+  $(".paginator .btn").click(function(){
+    var current = parseInt($(".paginator .current").attr("value"));
+    var offset = 0;
+    if($(this).attr("class").search("prev") > -1) {
+      offset = -1;
+    } else {
+      offset = 1;
+    }
+
+    var category1 = $("#category1").val();
+    var category2 = $("#category2").val();
+    var category3 = $("#category3").val();
+    var author = $("#author").val();
+    var start = (current - 1 + offset) * 10
+    $.post("query",{"author":author, "category1":category1, "category2":category2, "category3":category3, "start":start, "length":10}).done(function(jsonStr){
+      var response = jQuery.parseJSON(jsonStr);
+      var result = response["result"];
+      var content = ""
+      for (var i = 0; i < result.length; i++) {
+        content = content + "<tr><td>" + (start + i+1) + "</td><td>" + result[i]["QUESTION_TITLE"] + "</td><td>" + result[i]["USER_NAME"] + "</td><td><a href='/run?qid="+result[i]["QUESTION_ID"]+"' class='btn btn-default'>代码检测</a></td></tr>";
+      };
+      $("#question-list tbody tr").remove();
+      $("#question-list tbody").append(content);
+
+      $(".paginator").css("display","table");
+      var page_num = parseInt(response["length"]/10)+1;
+      $(".paginator .current").text((current+offset) + "/" + page_num);
+      $(".paginator .current").attr("value",(current+offset))
+      if(current + offset === 1) {
+        $(".paginator .prev").prop("disabled",true);
+      } else {
+        $(".paginator .prev").prop("disabled",false);
+      }
+      if(page_num === current + offset) {
+        $(".paginator .next").prop("disabled",true);
+      }
+
+    });
+
+  });
+$(document).ready(function(){
+  var url = location.href;
+  if(url.search("choose")>-1){
+    $(".page-title").text("代码检测");
+    $("#query-btn").text("确定");
+  } else {
+    $(".page-title").text("题目查询");
+  }
+});
+</script>
+{% end %}

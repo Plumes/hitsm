@@ -1,0 +1,217 @@
+<html>
+<head>
+<style>
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 50%;    
+}
+
+.bordered {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 1px #ccc; 
+    -moz-box-shadow: 0 1px 1px #ccc; 
+    box-shadow: 0 1px 1px #ccc;         
+}
+
+.bordered td:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;     
+}  
+   
+.bordered td, .bordered th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;    
+}
+.bordered td{
+	background-color: #FFFFFF;
+}
+.bordered th {
+    background-color: #dce9f9;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+    background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:    -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:     -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:      -o-linear-gradient(top, #ebf3fc, #dce9f9);
+    background-image:         linear-gradient(top, #ebf3fc, #dce9f9);
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset; 
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;      
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5); 
+}
+
+.bordered td:first-child, .bordered th:first-child {
+    border-left: none;
+}
+
+.bordered th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+.bordered th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+.bordered th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.bordered tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+.bordered tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+</style>
+
+
+<!-- Loading Bootstrap -->
+<!-- Loading Flat UI -->
+
+
+<script type="text/javascript">  
+//驱动器
+var fso, a, n, e, x;  
+fso = new ActiveXObject("Scripting.FileSystemObject");  
+e = new Enumerator(fso.Drives);  
+a = new Array;  
+for (; !e.atEnd(); e.moveNext()){  
+   x = e.item();  
+   a[a.length] = x.DriveLetter;  
+}  
+for(var i=0; i<a.length; i++) {  
+     document.write(a[i] + "<br>");  
+}  
+</script>
+</head>
+
+<title>程序代码相似性检测系统</title>
+
+<body background="/static/image/bg11.jpeg" >
+<script type="text/javascript">
+function loadFile(){
+    var fso = new ActiveXObject("Scripting.FileSystemObject");  
+    var folder = fso.GetFolder(path); //需要获取的路径  
+ 	document.write("文件数:" + folder.Files.Count+ "<br><br>");   
+ 	var fileList = new Enumerator(folder.Files);   
+ 	for (; !fileList.atEnd(); fileList.moveNext()){   
+  	document.write(fileList.item().Name + "<br>");
+ 	}   
+ }
+</script> 
+
+<h1 style="color:blue;text-align:center">程序代码相似性检测系统</h1>
+<hr/>
+<table align = "center" style="width:1000px">
+<tr>
+<td width="50%">
+      <form action="/upload" enctype="multipart/form-data" method="post">
+            <input id="input" name="file" type="file" multiple="multiple" />
+            <input type="submit" value="上传文件" align="right"/>
+	</form>
+
+</td>
+<td width="25%">
+<form style="text-align:left" action="/check" method="post">
+<input type="submit" value="开始检测" />
+</form>
+</td>
+<td width="25%">
+<form style="text-align:left" action="/" method="get">
+<input type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;重置&nbsp;&nbsp;&nbsp;&nbsp;" />
+</form>
+</td>
+
+</tr>
+</table>
+
+<table align="center"style="width:1000px;text-align:center">
+<tr>
+<td width="50%" valign="top">
+<table id="content" align="center" style="width:500px;text-align:center" class="bordered">
+<th>已选择源文件</th>
+<tr>
+<td>空</td>
+</tr>
+</table>
+    <script>
+    var inputElement = document.getElementById("input");  
+	inputElement.addEventListener("change", handleFiles, false);
+	
+	function handleFiles(){
+		var fileList = this.files;
+        var dd = document.getElementById('content');
+		dd.innerHTML = "<th>已选择源文件</th>"
+		for( var i = 0 ; i < fileList.length ; i++ ){
+            dd.innerHTML += "<tr><td>"+fileList[i].name+"</td></tr>";
+		}
+	}
+    </script>
+
+</td>
+<td width="50%" valign="top">
+<table align="center" style="width:500px;text-align:center" class="bordered">
+<th>已上传源文件</th>
+{% if len(filelist) == 0 %}
+<tr>
+<td>空</td>
+</tr>
+{% else %}
+{% for file in filelist %}
+<tr>
+<td>{{file}}</td>
+</tr>
+{% end %}
+{% end %}
+</table>
+</td>
+</tr>
+</table>
+{% if err==-1 %}
+<script type="text/javascript">
+	alert('您输入的路径不存在');
+</script>
+{% end %}
+{% if err==-2 %}
+<script type="text/javascript">
+	alert('您输入的是一个文件');
+</script>
+{% end %}
+{% if err==-3 %}
+<script type="text/javascript">
+	alert('您选择的路径中合法文件数量小于2个，无法检测');
+</script>
+{% end %}
+{% if err==-4 %}
+<script type="text/javascript">
+	alert('请先上传文件再检测');
+</script>
+{% end %}
+{% if err==-5 %}
+<script type="text/javascript">
+	alert('请先选择文件再上传');
+</script>
+{% end %}
+</body>
+</html>

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="content-wrapper">
+<div class="container">
+<div class="row">
+<h1 style="color:blue;text-align:center">程序代码相似性检测系统</h1>
+<hr/>
+<h4 style="text-align:right">
+<a href='/'>返回首页</a>
+</h4>
+<h2 id="ppp" style="text-align:center">代码检测中...</h2>
+<h4 id="qqq" style="text-align:center"></h4>
+<p id="perct" style="text-align:center"></p>
+<p style="text-align:center"></p>
+<p></p>
+<p></p>
+<div id="Left"></div>
+<div id="Layer" class="progress progress-striped active">
+<div id="probar" class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+<span id="prospan" class="sr-only" style="width:60%"></span>
+</div>
+</div>
+<div id="Right"><p></p></div>
+
+<table align="center"  class="table">
+<caption><b>完成任务列表:</b></caption>
+<tr>
+<th width="44%">待检测文件</th>
+<th width="44%">相似文件</th>
+<th width="12%">检测耗时</th>
+</tr>
+<!--{% for i in range (0,len(filelist)) %}
+{% for j in range (i+1,len(filelist)) %}
+<tr>
+<td>{{filelist[i]}}</td>
+<td></td><td></td>
+<td>{{filelist[j]}}</td>
+</tr>
+{% end %}
+{% end %}
+-->
+</table>
+</div>
+</div>
+</div>
+   	<script>
+		var max = 0, min = 9999999999999999,sum = 0,avg = 0;
+		var now = 0, tot = {{size*(size-1)/2}};
+        (function($) {          
+            var polling = function() {
+                $.get('/polling', function(data){
+					var dataObj = JSON.parse(data);
+					var timenow = dataObj.timelists[dataObj.i*dataObj.length+dataObj.j];
+					//document.write(dataObj.i);
+					$("table").append("<tr><td>"+dataObj.cppfilelist[dataObj.i]+"</td><td>"+dataObj.cppfilelist[dataObj.j]+"</td><td>"+timenow.toFixed(3)+" s</td></tr>");
+					now = now + 1 ;
+					document.getElementById("perct").innerHTML="总任务数:"+tot+",&nbsp;&nbsp;已完成:"+now+".";
+					document.getElementById("probar").style.width= (now/tot)*100+"%";
+					//$("p").write("已完成:"+dataObj.tsk)
+					if(timenow>max)
+						max=timenow;
+					if(timenow<min)
+						min=timenow;
+					sum = sum + timenow;
+
+					if(dataObj.i==dataObj.length-2 && dataObj.j==dataObj.length-1)
+					{
+						document.getElementById("ppp").innerHTML="检测完成,<a href='result'>查看结果</a>";
+						avg = sum / (dataObj.length*(dataObj.length-1)/2)
+						document.getElementById("qqq").innerHTML="总耗时:"+sum.toFixed(3)+" s ; 最长耗时:"+max.toFixed(3)+" s ; 最短耗时:"+min.toFixed(3)+" s ; 平均耗时:"+avg.toFixed(3)+" s ."
+						return;
+					}
+					//$("table").append("<tr><td>"+dataObj.j+"</td></tr>");
+                    polling();
+                });
+            };
+            polling();
+        })(jQuery);
+    </script>
+{% end %}
